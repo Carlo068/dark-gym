@@ -49,7 +49,6 @@ export default function Landing() {
             </section>
             <link rel="stylesheet" href="https://demos.creative-tim.com/notus-js/assets/styles/tailwind.css"></link>
             <link rel="stylesheet" href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"></link>
-
             <Footer></Footer>
         </body>
     );
