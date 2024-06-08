@@ -3,7 +3,7 @@ import { MongoClient } from "mongodb";
 export default async function handler(req, res) {
     const { method, body, query } = req;
     const client = await MongoClient.connect(process.env.MONGODB_URI);
-    const db = client.db("gym_data");
+    const db = client.db("workouts");
     const collection = db.collection("workouts");
 
     switch (method) {
