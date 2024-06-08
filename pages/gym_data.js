@@ -2,6 +2,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Disclosure } from "@headlessui/react";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid";
+import { useSession } from "next-auth/react";
+
 import 'tailwindcss/tailwind.css'; // Make sure you have Tailwind CSS configured in your project
 
 export default function GymData() {
@@ -18,6 +20,7 @@ export default function GymData() {
         Sunday: []
     });
     const [workoutDetails, setWorkoutDetails] = useState({});
+    const { data: session } = useSession();
 
     useEffect(() => {
         axios.get("/api/gym_data_fetch").then((response) => setWorkouts(response.data));
@@ -60,7 +63,7 @@ export default function GymData() {
 
          // Send the workout data along with user data to the backend
          axios.post("/api/save_workout", {
-            user: { /* User data here */ },
+            user: session.user._id,
             workout: { [selectedDay]: workoutsToSave }
         }).then(response => {
             console.log("Workout saved successfully:", response.data);
