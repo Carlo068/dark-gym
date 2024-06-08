@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Disclosure } from "@headlessui/react";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid";
 import { useSession } from "next-auth/react";
-import Header from "@/components/header";
 import LoginButton from "@/components/login_button";
 
 import 'tailwindcss/tailwind.css'; // Asegúrate de tener Tailwind CSS configurado en tu proyecto

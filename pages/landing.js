@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import LoginButton from '../components/login_button';
 import { Footer } from '@/components/footer';
-import {Header} from '@/components/header';
 
 export default function Home() {
     return (
