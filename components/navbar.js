@@ -1,5 +1,5 @@
 import LoginButton from "./login_button";
-
+// 
 export function Navbar() {
     return (
         <header className="bg-gray-800">
