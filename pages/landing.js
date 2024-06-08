@@ -15,7 +15,7 @@ export default function Home() {
                 </div>
                 
                 {/* Sign In Button */}
-                <div className="text-sm bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded transition duration-300">
+                <div className="text-sm bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition duration-300">
                     <LoginButton />
                 </div>
             </header>
@@ -35,6 +35,9 @@ export default function Home() {
                     </button>
                 </Link>
             </main>
+                
+                {/* Footer */}  
+                <Footer />
         </div>
     );
 }
