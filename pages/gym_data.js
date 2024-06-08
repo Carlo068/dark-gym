@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { Disclosure } from "@headlessui/react";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid";
 import { useSession } from "next-auth/react";
+import Header from "@/components/header";
+import LoginButton from "@/components/login_button";
 
 import 'tailwindcss/tailwind.css'; // Asegúrate de tener Tailwind CSS configurado en tu proyecto
 
@@ -10,7 +12,9 @@ export default function GymData() {
     const [workouts, setWorkouts] = useState(null);
     const [selectedWorkouts, setSelectedWorkouts] = useState([]);
     const [selectedDay, setSelectedDay] = useState("Monday");
+    const [savedWorkouts, setSavedWorkouts] = useState(null);
     const [dayWorkouts, setDayWorkouts] = useState({
+        
         Monday: [],
         Tuesday: [],
         Wednesday: [],
@@ -129,9 +133,17 @@ export default function GymData() {
     return (
         <div className="flex flex-col min-h-screen bg-gray-100 p-6">
             {/* Encabezado */}
-            <header className="text-center">
-                <h1 className="text-3xl font-bold text-black mb-8">Workouts</h1>
-            </header>
+            <div className="flex justify-between items-center mb-8">
+                <h1 className="text-3xl font-bold text-black">Workouts</h1>
+                <button 
+                    onClick={() => {
+                        window.location.href = "/";
+                    }}
+                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                >
+                    Home
+                </button>
+            </div>
 
             {/* Contenido Principal */}
             <main className="flex flex-col flex-grow items-center">
