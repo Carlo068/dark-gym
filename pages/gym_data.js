@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Disclosure } from "@headlessui/react";
+import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid";
 import { useSession } from "next-auth/react";
 import LoginButton from "@/components/login_button";
@@ -151,15 +151,15 @@ export default function GymData() {
                         <Disclosure key={category}>
                             {({ open }) => (
                                 <>
-                                    <Disclosure.Button className="flex justify-between w-full px-4 py-2 text-sm font-medium text-left text-black bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+                                    <DisclosureButton className="flex justify-between w-full px-4 py-2 text-sm font-medium text-left text-black bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
                                         <span>{category}</span>
                                         {open ? (
                                             <ChevronUpIcon className="w-5 h-5 text-gray-500" />
                                         ) : (
                                             <ChevronDownIcon className="w-5 h-5 text-gray-500" />
                                         )}
-                                    </Disclosure.Button>
-                                    <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-700">
+                                    </DisclosureButton>
+                                    <DisclosurePanel className="px-4 pt-4 pb-2 text-sm text-gray-700">
                                         <ul className="space-y-2">
                                             {workouts &&
                                                 workouts.slice(index * 17, (index + 1) * 17).map((workout) => (
@@ -174,7 +174,7 @@ export default function GymData() {
                                                     </li>
                                                 ))}
                                         </ul>
-                                    </Disclosure.Panel>
+                                    </DisclosurePanel>
                                 </>
                             )}
                         </Disclosure>
