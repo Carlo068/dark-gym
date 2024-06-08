@@ -58,6 +58,18 @@ export default function GymData() {
         updatedDayWorkouts[selectedDay] = workoutsToSave;
         setDayWorkouts(updatedDayWorkouts);
 
+         // Send the workout data along with user data to the backend
+         axios.post("/api/save_workout", {
+            user: { /* User data here */ },
+            workout: { [selectedDay]: workoutsToSave }
+        }).then(response => {
+            console.log("Workout saved successfully:", response.data);
+            // You can handle success here, such as showing a success message to the user
+        }).catch(error => {
+            console.error("Error saving workout:", error);
+            // You can handle errors here, such as showing an error message to the user
+        });
+
         console.log(`Workouts saved for ${selectedDay}:`, updatedDayWorkouts[selectedDay]);
     };
 
