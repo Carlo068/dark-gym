@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { Navbar } from "@/components/navbar";
 
 export default function GymData() {
-    const [workouts, setWorkouts] = useState(null);
+    const [workouts, setWorkouts] = useState([]);
     const [selectedWorkouts, setSelectedWorkouts] = useState([]);
     const [workoutName, setWorkoutName] = useState('');
     const [workoutDetails, setWorkoutDetails] = useState({});
@@ -69,6 +69,7 @@ export default function GymData() {
         }).then(response => {
             console.log("Workout saved successfully:", response.data);
             fetchSavedWorkouts();
+            alert("Workout saved successfully!"); // Add this line
         }).catch(error => {
             console.error("Error saving workout:", error);
         });
@@ -105,6 +106,23 @@ export default function GymData() {
         });
     };
 
+    const categorizeWorkouts = (category) => {
+        switch (category) {
+            case 'Chest':
+                return workouts.slice(0, 17);
+            case 'Back':
+                return workouts.slice(17, 30);
+            case 'Triceps':
+                return workouts.slice(30, 41);
+            case 'Biceps':
+                return workouts.slice(41, 57);
+            case 'Legs':
+                return workouts.slice(57, 77);
+            default:
+                return [];
+        }
+    };
+
     return (
         <div className="flex flex-col min-h-screen bg-gray-100 p-4 md:p-6">
             <div className="flex justify-between items-center mb-4 md:mb-8">
@@ -112,7 +130,7 @@ export default function GymData() {
             </div>
             <main className="flex flex-col flex-grow items-center">
                 <div className="w-full grid grid-cols-1 gap-4">
-                    {["Chest", "Back", "Triceps", "Biceps", "Legs"].map((category, index) => (
+                    {["Chest", "Back", "Triceps", "Biceps", "Legs"].map((category) => (
                         <Disclosure key={category}>
                             {({ open }) => (
                                 <>
@@ -127,7 +145,7 @@ export default function GymData() {
                                     <DisclosurePanel className="px-3 md:px-4 pt-4 pb-2 text-sm md:text-base text-gray-700">
                                         <ul className="space-y-2">
                                             {workouts &&
-                                                workouts.slice(index * 17, (index + 1) * 17).map((workout) => (
+                                                categorizeWorkouts(category).map((workout) => (
                                                     <li key={workout._id} className="flex items-center">
                                                         <input
                                                             type="checkbox"
@@ -174,4 +192,5 @@ export default function GymData() {
         </div>
     );
 }
+
 
