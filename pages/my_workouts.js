@@ -32,7 +32,8 @@ export default function Workouts() {
         try {
             const response = await axios.get('/api/save_workout');
             console.log('Fetched saved workouts:', response.data.data); // Debugging statement
-            setWorkoutRoutines(response.data.data);
+            const userWorkouts = response.data.data.filter(routine => routine.userId === session.user.id);
+            setWorkoutRoutines(userWorkouts);
         } catch (error) {
             console.error('Error fetching saved workouts:', error);
         }
@@ -75,4 +76,5 @@ const WorkoutRoutine = ({ routine, exercises }) => {
         </div>
     );
 };
+
 
