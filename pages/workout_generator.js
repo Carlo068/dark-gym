@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid";
 import { useSession } from "next-auth/react";
+import { Navbar } from "@/components/navbar";
 
 export default function GymData() {
     const [workouts, setWorkouts] = useState(null);
@@ -62,6 +63,7 @@ export default function GymData() {
         }));
 
         axios.post("/api/save_workout", {
+            userName: session.user.name,
             userId: session.user.id,
             workout: { name: workoutName, exercises: workoutsToSave }
         }).then(response => {
@@ -106,15 +108,7 @@ export default function GymData() {
     return (
         <div className="flex flex-col min-h-screen bg-gray-100 p-4 md:p-6">
             <div className="flex justify-between items-center mb-4 md:mb-8">
-                <h1 className="text-xl md:text-3xl font-bold text-black">Workouts</h1>
-                <button 
-                    onClick={() => {
-                        window.location.href = "/";
-                    }}
-                    className="bg-blue-500 text-white px-3 md:px-4 py-2 rounded hover:bg-blue-700 transition"
-                >
-                    Home
-                </button>
+                <h1 className="text-xl md:text-3xl font-bold text-black">Create your workout</h1>
             </div>
             <main className="flex flex-col flex-grow items-center">
                 <div className="w-full grid grid-cols-1 gap-4">
@@ -176,6 +170,8 @@ export default function GymData() {
                     </button>
                 </div>
             </main>
+            <Navbar />
         </div>
     );
 }
+

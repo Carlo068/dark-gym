@@ -6,11 +6,21 @@ export default function Workouts() {
     const { data: session } = useSession();
     const [workoutRoutines, setWorkoutRoutines] = useState([]);
     const [exercises, setExercises] = useState({});
+    const [weeklySchedule, setWeeklySchedule] = useState({
+        Monday: null,
+        Tuesday: null,
+        Wednesday: null,
+        Thursday: null,
+        Friday: null,
+        Saturday: null,
+        Sunday: null
+    });
 
     useEffect(() => {
         if (session) {
             fetchExerciseData();
             fetchSavedWorkouts();
+            fetchWeeklySchedule();
         }
     }, [session]);
 
@@ -39,6 +49,37 @@ export default function Workouts() {
         }
     };
 
+    const fetchWeeklySchedule = async () => {
+        try {
+            const response = await axios.get('/api/schedule', {
+                params: { userId: session.user.id }
+            });
+            console.log('Fetched weekly schedule:', response.data);
+            setWeeklySchedule(response.data);
+        } catch (error) {
+            console.error('Error fetching weekly schedule:', error);
+        }
+    };
+
+    const handleAssignWorkout = (day, workoutId) => {
+        setWeeklySchedule((prevSchedule) => ({
+            ...prevSchedule,
+            [day]: { workoutId }
+        }));
+    };
+
+    const handleSaveSchedule = async () => {
+        try {
+            const response = await axios.put('/api/schedule', {
+                userId: session.user.id,
+                schedule: weeklySchedule
+            });
+            console.log('Schedule saved successfully:', response.data);
+        } catch (error) {
+            console.error('Error saving schedule:', error);
+        }
+    };
+
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-4">Your Workout Routines</h1>
@@ -50,6 +91,57 @@ export default function Workouts() {
                 ) : (
                     <p className="col-span-full text-center text-gray-500">No workout routines found.</p>
                 )}
+            </div>
+            <div className="mt-4">
+                <h2 className="text-xl font-semibold mb-2">Assign Workouts to Days</h2>
+                <table className="table-auto w-full border-collapse border border-gray-300">
+                    <thead>
+                        <tr>
+                            <th className="border border-gray-300 px-4 py-2">Day</th>
+                            <th className="border border-gray-300 px-4 py-2">Workout</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => (
+                            <tr key={day}>
+                                <td className="border border-gray-300 px-4 py-2">{day}</td>
+                                <td className="border border-gray-300 px-4 py-2 text-black">
+                                    <select
+                                        className="border p-2 rounded w-full"
+                                        value={weeklySchedule[day]?.workoutId || ''}
+                                        onChange={(e) => handleAssignWorkout(day, e.target.value)}
+                                    >
+                                        <option value="">Select Workout</option>
+                                        {workoutRoutines.map((routine) => (
+                                            <option key={routine._id} value={routine._id}>{routine.workout.name}</option>
+                                        ))}
+                                    </select>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <div className="mt-4">
+                    <button
+                        onClick={handleSaveSchedule}
+                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                    >
+                        Save Schedule
+                    </button>
+                </div>
+            </div>
+            <div className="mt-4">
+                <h2 className="text-xl font-semibold mb-2">Weekly Schedule</h2>
+                {Object.keys(weeklySchedule).map((day) => (
+                    <div key={day} className="mb-4">
+                        <h3 className="text-lg font-medium">{day}</h3>
+                        <ul>
+                            {weeklySchedule[day] && (
+                                <li className="ml-4">{workoutRoutines.find(w => w._id === weeklySchedule[day].workoutId)?.workout.name}</li>
+                            )}
+                        </ul>
+                    </div>
+                ))}
             </div>
         </div>
     );
@@ -75,6 +167,10 @@ const WorkoutRoutine = ({ routine, exercises }) => {
             </ul>
         </div>
     );
-};
+}
+
+
+
+
 
 
