@@ -11,8 +11,8 @@ export default async function handler(req, res) {
         const db = client.db('test');
         const workoutsCollection = db.collection('workouts');
         if (req.method === 'POST') {
-            const { workout } = req.body;
-            const result = await workoutsCollection.insertOne({ workout });
+            const { userId, workout } = req.body;
+            const result = await workoutsCollection.insertOne({userId, workout });
             res.status(200).json({ success: true, message: 'Workout saved successfully', data: result });
         } else if (req.method === 'GET') {
             const workouts = await workoutsCollection.find({}).toArray();

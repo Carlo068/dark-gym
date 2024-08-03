@@ -64,7 +64,7 @@ export default function GymData() {
         setDayWorkouts(updatedDayWorkouts);
 
         axios.post("/api/save_workout", {
-            user: session.user._id,
+            user: session.user.id,
             workout: { [selectedDay]: workoutsToSave }
         }).then(response => {
             console.log("Workout saved successfully:", response.data);

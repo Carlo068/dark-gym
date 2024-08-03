@@ -10,11 +10,14 @@ export default function GymData() {
     const [workoutName, setWorkoutName] = useState('');
     const [workoutDetails, setWorkoutDetails] = useState({});
     const [savedWorkouts, setSavedWorkouts] = useState([]);
+    const { data: session } = useSession();
 
     useEffect(() => {
-        axios.get("/api/gym_data_fetch").then((response) => setWorkouts(response.data));
-        fetchSavedWorkouts();
-    }, []);
+        if (session) {
+            axios.get("/api/gym_data_fetch").then((response) => setWorkouts(response.data));
+            fetchSavedWorkouts();
+        }
+    }, [session]);
 
     const fetchSavedWorkouts = async () => {
         try {
@@ -48,12 +51,18 @@ export default function GymData() {
     };
 
     const saveWorkout = () => {
+        if (!session || !session.user) {
+            console.error("User is not logged in.");
+            return;
+        }
+
         const workoutsToSave = selectedWorkouts.map((workoutId) => ({
             id: workoutId,
             ...workoutDetails[workoutId]
         }));
 
         axios.post("/api/save_workout", {
+            userId: session.user.id,
             workout: { name: workoutName, exercises: workoutsToSave }
         }).then(response => {
             console.log("Workout saved successfully:", response.data);
@@ -91,38 +100,6 @@ export default function GymData() {
                 );
             }
             return null;
-        });
-    };
-
-    const renderSavedWorkouts = () => {
-        return savedWorkouts.map((workout) => {
-            console.log('Rendering workout:', workout); // Debugging statement
-            return (
-                <div key={workout._id} className="mt-8 w-full max-w-2xl bg-white p-4 rounded shadow text-black">
-                    <h2 className="text-xl font-bold text-gray-700 mb-2">{workout.name}</h2>
-                    <table className="min-w-full bg-white">
-                        <thead>
-                            <tr>
-                                <th className="py-2">Exercise</th>
-                                <th className="py-2">Sets</th>
-                                <th className="py-2">Reps</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {workout.exercises && workout.exercises.map((exercise, index) => {
-                                console.log('Rendering exercise:', exercise); // Debugging statement
-                                return (
-                                    <tr key={index} className="border-t">
-                                        <td className="py-2">{exercise.name}</td>
-                                        <td className="py-2">{exercise.sets}</td>
-                                        <td className="py-2">{exercise.reps}</td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                </div>
-            );
         });
     };
 
@@ -198,14 +175,7 @@ export default function GymData() {
                         Save Workout
                     </button>
                 </div>
-
-                {renderSavedWorkouts()}
             </main>
         </div>
     );
 }
-
-
-
-
-

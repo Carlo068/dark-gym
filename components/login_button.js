@@ -5,7 +5,7 @@ export default function LoginButton() {
   if (session) {
     return (
       <>
-        {session.user.name} <br />
+        {session.user.id} <br />
         <button onClick={() => signOut()}>Sign out</button>
       </>
     )
