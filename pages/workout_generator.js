@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid";
+import { useSession } from "next-auth/react";
 
 export default function GymData() {
     const [workouts, setWorkouts] = useState(null);

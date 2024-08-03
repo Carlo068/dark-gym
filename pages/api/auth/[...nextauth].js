@@ -1,23 +1,36 @@
 import NextAuth from "next-auth"
-import GithubProvider from "next-auth/providers/github"
-import { MongoDBAdapter } from "@auth/mongodb-adapter"
-import clientPromise from "@/library/mongo/mongodb"
 import GoogleProvider from "next-auth/providers/google"
+import connectDB from "@/library/mongo/dbConnect";
 
-export const authOptions = {
-  adapter: MongoDBAdapter(clientPromise),
-  // Configure one or more authentication providers
+export const authOptions = ({
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
-    GithubProvider({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
-    }),
-    // ...add more providers here
   ],
-}
+  callbacks: {
+    async session({ session, token, user }) {
+      const db = await connectDB();
+      const userRecord = await db.connection.db.collection('users').findOne({ email: session.user.email });
+
+      session.user.id = userRecord._id;
+      // session.accessToken = token.accessToken;
+      // session.refreshToken = token.refreshToken;
+      return session;
+    },
+    async signIn({ user, account, profile, email, credentials }) {
+      const db = await connectDB();
+      const existingUser = await db.connection.db.collection('users').findOne({ email: user.email });
+
+      if (!existingUser) {
+        await db.connection.db.collection('users').insertOne({ email: user.email, name: user.name, image: user.image });
+      }
+
+      return true;
+    },
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+});
 
 export default NextAuth(authOptions)
