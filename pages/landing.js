@@ -29,7 +29,7 @@ export default function Home() {
                 <h1 className="text-5xl font-bold mb-8">DARK</h1>
                 
                 {/* Redirect Button */}
-                <Link href="/gym_data">
+                <Link href="/workout_generator">
                     <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-full transition duration-300">
                         Go to Workout Generator
                     </button>

@@ -5,7 +5,7 @@ import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid";
 import { useSession } from "next-auth/react";
 import LoginButton from "@/components/login_button";
 
-import 'tailwindcss/tailwind.css'; // Asegúrate de tener Tailwind CSS configurado en tu proyecto
+import 'tailwindcss/tailwind.css';
 
 export default function GymData() {
     const [workouts, setWorkouts] = useState(null);
@@ -13,7 +13,7 @@ export default function GymData() {
     const [selectedDay, setSelectedDay] = useState("Monday");
     const [savedWorkouts, setSavedWorkouts] = useState(null);
     const [dayWorkouts, setDayWorkouts] = useState({
-        
+
         Monday: [],
         Tuesday: [],
         Wednesday: [],
@@ -149,34 +149,34 @@ export default function GymData() {
                 <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {["Chest", "Back", "Triceps", "Biceps", "Legs"].map((category, index) => (
                         <Disclosure key={category}>
-                            {({ open }) => (
-                                <>
-                                    <DisclosureButton className="flex justify-between w-full px-4 py-2 text-sm font-medium text-left text-black bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
-                                        <span>{category}</span>
-                                        {open ? (
-                                            <ChevronUpIcon className="w-5 h-5 text-gray-500" />
-                                        ) : (
-                                            <ChevronDownIcon className="w-5 h-5 text-gray-500" />
-                                        )}
-                                    </DisclosureButton>
-                                    <DisclosurePanel className="px-4 pt-4 pb-2 text-sm text-gray-700">
-                                        <ul className="space-y-2">
-                                            {workouts &&
-                                                workouts.slice(index * 17, (index + 1) * 17).map((workout) => (
-                                                    <li key={workout._id} className="flex items-center">
-                                                        <input
-                                                            type="checkbox"
-                                                            id={workout._id}
-                                                            className="mr-2"
-                                                            onChange={() => handleCheckboxChange(workout._id)}
-                                                        />
-                                                        <label htmlFor={workout._id} className="flex-1">{workout.Ejercicio}</label>
-                                                    </li>
-                                                ))}
-                                        </ul>
-                                    </DisclosurePanel>
-                                </>
-                            )}
+                        {({ open }) => (
+                            <>
+                            <DisclosureButton className="flex justify-between w-full px-4 py-2 text-sm font-medium text-left text-black bg-gray-200 rounded-lg hover:bg-gray-300 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+                                <span>{category}</span>
+                                {open ? (
+                                <ChevronUpIcon className="w-5 h-5 text-gray-500" />
+                                ) : (
+                                <ChevronDownIcon className="w-5 h-5 text-gray-500" />
+                                )}
+                            </DisclosureButton>
+                            <DisclosurePanel className="px-4 pt-4 pb-2 text-sm text-gray-700">
+                                <ul className="space-y-2">
+                                {workouts &&
+                                    workouts.slice(index * 17, (index + 1) * 17).map((workout) => (
+                                    <li key={workout._id} className="flex items-center">
+                                        <input
+                                        type="checkbox"
+                                        id={workout._id}
+                                        className="mr-2"
+                                        onChange={() => handleCheckboxChange(workout._id)}
+                                        />
+                                        <label htmlFor={workout._id} className="flex-1">{workout.Ejercicio}</label>
+                                    </li>
+                                    ))}
+                                </ul>
+                            </DisclosurePanel>
+                            </>
+                        )}
                         </Disclosure>
                     ))}
                 </div>
